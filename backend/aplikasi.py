@@ -6,7 +6,7 @@ import google.generativeai as genai
 app = Flask(__name__)
 CORS(app)
 
-# Koneksi ke API Key yang kamu pasang di Vercel
+# Pastikan mengambil API Key dari Vercel
 api_key = os.environ.get("GEMINI_API_KEY")
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel('gemini-pro')
@@ -16,14 +16,18 @@ def chat():
     try:
         data = request.json
         user_message = data.get('message')
+        if not user_message:
+            return jsonify({'error': 'Pesan kosong'}), 400
+            
         response = model.generate_content(user_message)
         return jsonify({'reply': response.text})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@app.route('/api/health', methods=['GET'])
-def health():
-    return jsonify({'status': 'healthy'}), 200
+@app.route('/', methods=['GET'])
+def index():
+    return jsonify({'status': 'Online', 'message': 'API is running'})
 
 if __name__ == '__main__':
     app.run(debug=True)
+
