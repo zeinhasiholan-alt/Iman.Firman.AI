@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot Zein</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="chat-container">
+        <h2>🤖 AI Chatbot</h2>
+        <div id="messages"></div>
+        <div style="display: flex; gap: 10px;">
+            <input type="text" id="userInput" placeholder="Tanya sesuatu...">
+            <button onclick="sendMessage()">Kirim</button>
+        </div>
+    </div>
+
+    <script>
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const msgDiv = document.getElementById('messages');
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            // Tampilkan pesan kamu
+            msgDiv.innerHTML += `<p style="color: #818cf8;"><b>Anda:</b> ${text}</p>`;
+            input.value = '';
+
+            // Tampilkan loading
+            const loadingId = "load-" + Date.now();
+            msgDiv.innerHTML += `<p id="${loadingId}"><i>AI sedang mengetik...</i></p>`;
+            msgDiv.scrollTop = msgDiv.scrollHeight;
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text })
+                });
+
+                const data = await response.json();
+                document.getElementById(loadingId).remove();
+
+                if (data.reply) {
+                    msgDiv.innerHTML += `<p><b>AI:</b> ${data.reply}</p>`;
+                } else {
+                    msgDiv.innerHTML += `<p style="color: red;"><b>Error:</b> ${data.error}</p>`;
+                }
+            } catch (err) {
+                document.getElementById(loadingId).innerText = "Gagal terhubung ke server.";
+            }
+            msgDiv.scrollTop = msgDiv.scrollHeight;
+        }
+
+        // Fitur tekan Enter untuk kirim
+        document.getElementById('userInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>
