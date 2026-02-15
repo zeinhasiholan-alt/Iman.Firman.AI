@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://iman-firman-ai.vercel.app/';
+const API_BASE_URL = 'https://iman-firman-ai.vercel.app/api';
 
 class APIClient {
     async request(endpoint, options = {}) {
