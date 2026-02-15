@@ -3,100 +3,308 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Mirror - Chat & Generate Gambar</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Hacker Chatbot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        body {
+            background: #0f0f0f;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+        .chat-container {
+            width: 100%;
+            max-width: 600px;
+            height: 700px;
+            background: #0a0a0a;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .chat-header {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 15px 20px;
+            border-bottom: 1px solid #00ff00;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-shadow: 0 0 5px #00ff00;
+        }
+        .chat-header h2 {
+            font-size: 1.5rem;
+            font-weight: 400;
+        }
+        .chat-header p {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+        .chat-box {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            scrollbar-width: thin;
+            scrollbar-color: #00ff00 #1a1a1a;
+        }
+        .chat-box::-webkit-scrollbar {
+            width: 8px;
+        }
+        .chat-box::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        .chat-box::-webkit-scrollbar-thumb {
+            background: #00ff00;
+            border-radius: 4px;
+        }
+        .message {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            max-width: 90%;
+        }
+        .user-message {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        .bot-message {
+            align-self: flex-start;
+        }
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: #1a1a1a;
+            border: 1px solid #00ff00;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00ff00;
+            font-weight: bold;
+            font-size: 18px;
+            text-transform: uppercase;
+            box-shadow: 0 0 8px #00ff00;
+            flex-shrink: 0;
+        }
+        .bot-message .avatar {
+            background: #003300;
+        }
+        .message-content {
+            background: #1a1a1a;
+            padding: 12px 16px;
+            border: 1px solid #00ff00;
+            border-radius: 8px;
+            color: #00ff00;
+            word-wrap: break-word;
+            font-size: 14px;
+            line-height: 1.5;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+        }
+        .user-message .message-content {
+            background: #0f3f0f;
+            border-color: #00ff00;
+            color: #00ff00;
+        }
+        .timestamp {
+            font-size: 10px;
+            color: #00aa00;
+            margin-top: 5px;
+            text-align: right;
+            opacity: 0.7;
+            font-family: monospace;
+        }
+        .chat-input-area {
+            display: flex;
+            padding: 15px 20px;
+            background: #0a0a0a;
+            border-top: 1px solid #00ff00;
+            gap: 10px;
+        }
+        .chat-input-area input {
+            flex: 1;
+            padding: 12px 15px;
+            background: #1a1a1a;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            outline: none;
+            color: #00ff00;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+        }
+        .chat-input-area input::placeholder {
+            color: #006600;
+        }
+        .chat-input-area input:focus {
+            box-shadow: 0 0 10px #00ff00;
+        }
+        .chat-input-area button {
+            background: #1a1a1a;
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: 0 0 10px #00ff00;
+        }
+        .chat-input-area button:hover {
+            background: #00ff00;
+            color: #0a0a0a;
+            box-shadow: 0 0 20px #00ff00;
+        }
+        .send-icon::before {
+            content: ">";
+            font-size: 24px;
+            font-weight: bold;
+        }
+        /* Blinking cursor effect */
+        .typing-indicator::after {
+            content: "_";
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
 </head>
-<body class="dark-mode">
-    <div class="container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="sidebar-header">
-                <h2><i class="fas fa-robot"></i> AI Mirror</h2>
-                <button id="newChatBtn" class="new-chat-btn">
-                    <i class="fas fa-plus"></i> Chat Baru
-                </button>
-            </div>
-            
-            <div class="chat-history">
-                <h3>Riwayat Chat</h3>
-                <ul id="historyList">
-                    <!-- Akan diisi dengan JavaScript -->
-                </ul>
-            </div>
-            
-            <div class="sidebar-footer">
-                <button id="themeToggle" class="theme-btn">
-                    <i class="fas fa-moon"></i> Tema Gelap
-                </button>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2>⚡ ROOT@CHATBOT:~#</h2>
+            <p>// HACKER TERMINAL v1.0 //</p>
+        </div>
+        <div class="chat-box" id="chatBox">
+            <!-- Pesan sambutan dari bot -->
+            <div class="message bot-message">
+                <div class="avatar">$</div>
+                <div class="message-content">
+                    Access granted. Hello hacker! Ada yang bisa dieksekusi?
+                    <div class="timestamp">[00:00]</div>
+                </div>
             </div>
         </div>
-
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Header -->
-            <div class="chat-header">
-                <h1>AI Assistant</h1>
-                <p>Dapat membantu menjawab pertanyaan dan membuat gambar</p>
-            </div>
-
-            <!-- Chat Messages -->
-            <div class="chat-messages" id="chatMessages">
-                <div class="message bot-message">
-                    <div class="avatar">
-                        <i class="fas fa-robot"></i>
-                    </div>
-                    <div class="message-content">
-                        <p>Halo! Saya AI Mirror. Saya dapat membantu Anda dalam dua mode:</p>
-                        <p>💬 <strong>Mode Chat:</strong> Menjawab pertanyaan dan berdiskusi</p>
-                        <p>🎨 <strong>Mode Generate:</strong> Membuat gambar dari deskripsi teks</p>
-                        <p>Silakan pilih mode di bawah!</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mode Selector -->
-            <div class="mode-selector">
-                <button class="mode-btn active" data-mode="chat">
-                    <i class="fas fa-comment"></i> Mode Chat
-                </button>
-                <button class="mode-btn" data-mode="generate">
-                    <i class="fas fa-image"></i> Mode Generate Gambar
-                </button>
-            </div>
-
-            <!-- Input Area -->
-            <div class="input-area">
-                <div class="input-container">
-                    <textarea id="userInput" placeholder="Ketik pesan atau deskripsi gambar..." rows="1"></textarea>
-                    <button id="sendBtn" class="send-btn">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </div>
-                <div class="input-hint" id="inputHint">
-                    <i class="fas fa-info-circle"></i>
-                    <span>Mode Chat: Tanyakan apa saja</span>
-                </div>
-            </div>
+        <div class="chat-input-area">
+            <input type="text" id="userInput" placeholder="root@server:~$ ketik perintah..." autocomplete="off">
+            <button id="sendButton" aria-label="Kirim perintah">
+                <span class="send-icon"></span>
+            </button>
         </div>
     </div>
 
-    <!-- Image Modal -->
-    <div id="imageModal" class="modal">
-        <span class="close-modal">&times;</span>
-        <div class="modal-content">
-            <img id="modalImage" src="" alt="Generated Image">
-            <div class="modal-actions">
-                <button id="downloadBtn" class="modal-btn">
-                    <i class="fas fa-download"></i> Download
-                </button>
-                <button id="shareBtn" class="modal-btn">
-                    <i class="fas fa-share"></i> Share
-                </button>
-            </div>
-        </div>
-    </div>
+    <script>
+        const chatBox = document.getElementById('chatBox');
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
 
-    <script src="script.js"></script>
+        function addMessage(sender, message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            
+            if (sender === 'user') {
+                messageDiv.classList.add('user-message');
+            } else {
+                messageDiv.classList.add('bot-message');
+            }
+
+            const avatar = document.createElement('div');
+            avatar.classList.add('avatar');
+            avatar.textContent = sender === 'user' ? '>' : '$';
+
+            const contentDiv = document.createElement('div');
+            contentDiv.classList.add('message-content');
+            
+            const textPara = document.createElement('p');
+            textPara.textContent = message;
+            
+            const timestamp = document.createElement('div');
+            timestamp.classList.add('timestamp');
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            timestamp.textContent = `[${hours}:${minutes}]`;
+
+            contentDiv.appendChild(textPara);
+            contentDiv.appendChild(timestamp);
+
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(contentDiv);
+
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function getBotResponse(userMessage) {
+            const message = userMessage.toLowerCase().trim();
+            
+            // Respon dengan gaya hacker
+            if (message.includes('halo') || message.includes('hai') || message.includes('hi') || message.includes('hey')) {
+                return "Scanning... Halo! Ready untuk koneksi.";
+            } else if (message.includes('apa kabar') || message.includes('kabar') || message.includes('status')) {
+                return "System status: online. Semua sistem berfungsi.";
+            } else if (message.includes('siapa kamu') || message.includes('nama kamu') || message.includes('identitas')) {
+                return "Akses terbatas. Saya adalah chatbot protokol 0x7C5.";
+            } else if (message.includes('terima kasih') || message.includes('makasih') || message.includes('thanks')) {
+                return "Anda diterima. Terima kasih telah menggunakan jalur aman.";
+            } else if (message.includes('selamat pagi') || message.includes('selamat siang') || message.includes('selamat malam')) {
+                return "Waktu lokal terdeteksi. Semoga harimu penuh kode.";
+            } else if (message.includes('bye') || message.includes('exit') || message.includes('keluar')) {
+                return "Mengakhiri sesi. Sampai jumpa di dunia maya.";
+            } else if (message.includes('help') || message.includes('bantuan')) {
+                return "Perintah yang dikenali: halo, kabar, siapa kamu, terima kasih, selamat ..., bye, help.";
+            } else {
+                return "Perintah tidak dikenal. Ketik 'help' untuk bantuan.";
+            }
+        }
+
+        function sendMessage() {
+            const userMessage = userInput.value.trim();
+            if (userMessage === '') return;
+
+            addMessage('user', userMessage);
+            userInput.value = '';
+
+            // Efek mengetik
+            setTimeout(() => {
+                const botResponse = getBotResponse(userMessage);
+                addMessage('bot', botResponse);
+            }, 500);
+        }
+
+        sendButton.addEventListener('click', sendMessage);
+
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        window.addEventListener('load', () => {
+            userInput.focus();
+        });
+    </script>
 </body>
-              </html>
+    </html>
