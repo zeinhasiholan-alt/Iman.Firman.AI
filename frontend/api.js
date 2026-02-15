@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://iman-firman-ai.vercel.app/';
 
 class APIClient {
     async request(endpoint, options = {}) {
