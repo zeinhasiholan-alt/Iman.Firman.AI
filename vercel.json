@@ -1,11 +1,24 @@
 {
+  "name": "ai-mirror-chat",
   "version": 2,
   "builds": [
-    { "src": "app.py", "use": "@vercel/python" },
-    { "src": "index.html", "use": "@vercel/static" }
+    {
+      "src": "*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.js",
+      "use": "@vercel/static"
+    }
   ],
-  "rewrites": [
-    { "source": "/api/chat", "destination": "app.py" },
-    { "source": "/(.*)", "destination": "/$1" }
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
   ]
 }
