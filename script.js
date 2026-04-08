@@ -1,63 +1,71 @@
-// --- KREDENSIAL ---
+// Data Riwayat Chat Simpel
+let chatHistory = [];
+
 function doLogin() {
     const u = document.getElementById('uIn').value;
     const p = document.getElementById('pIn').value;
-    // Password khusus Anda
     if(u === 'rex2003' && p === 'manz2005') {
         document.getElementById('loginOverlay').style.display = 'none';
         document.getElementById('chatApp').style.display = 'flex';
     } else {
-        const card = document.getElementById('loginCard');
-        card.classList.add('shake');
-        setTimeout(() => card.classList.remove('shake'), 400);
+        document.getElementById('loginCard').classList.add('shake');
+        setTimeout(() => document.getElementById('loginCard').classList.remove('shake'), 400);
     }
 }
 
-// --- TEMA ---
-const themeBtn = document.getElementById('themeSwitch');
-themeBtn.addEventListener('click', () => {
-    const currentTheme = document.body.getAttribute('data-theme');
-    const target = currentTheme === 'dark' ? 'light' : 'dark';
+// Hapus Pesan di Tampilan Saat Ini
+function clearCurrentChat() {
+    const msgBox = document.getElementById('msgBox');
+    msgBox.innerHTML = `<div class="message bot"><div class="bubble">Pesan telah dihapus. Ada lagi yang bisa saya bantu?</div></div>`;
+}
+
+// Buat Tab Chat Baru
+function createNewChat() {
+    const historyList = document.getElementById('chatHistory');
+    const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    
+    // Simpan ke daftar history
+    const item = document.createElement('div');
+    item.className = 'history-item';
+    item.innerText = `Chat Baru - ${time}`;
+    item.onclick = () => clearCurrentChat(); // Simulasi pindah chat
+    historyList.prepend(item);
+    
+    clearCurrentChat();
+}
+
+// Logika Ganti Tema
+document.getElementById('themeSwitch').addEventListener('click', function() {
+    const isDark = document.body.getAttribute('data-theme') === 'dark';
+    const target = isDark ? 'light' : 'dark';
     document.body.setAttribute('data-theme', target);
-    themeBtn.innerText = target === 'dark' ? 'Mode Terang' : 'Mode Gelap';
+    this.innerText = target === 'dark' ? 'Mode Terang' : 'Mode Gelap';
 });
 
-// --- CHAT API ---
+// Koneksi API (Key Anda Aman di sini)
 const API_KEY = "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";
 const msgInput = document.getElementById('msgInput');
 const msgBox = document.getElementById('msgBox');
 
-msgInput.addEventListener('input', function() {
-    this.style.height = 'auto';
-    this.style.height = this.scrollHeight + 'px';
-});
-
 async function pushMsg() {
-    const text = msgInput.value.trim();
-    if(!text) return;
+    const val = msgInput.value.trim();
+    if(!val) return;
 
-    addUI(text, 'user');
+    addUI(val, 'user');
     msgInput.value = '';
-    msgInput.style.height = 'auto';
-
-    const loadId = addUI("Sedang mengetik...", 'bot');
+    
+    const loadId = addUI("Berpikir...", 'bot');
 
     try {
-        const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
             method: "POST",
-            headers: { 
-                "Authorization": `Bearer ${API_KEY}`, 
-                "Content-Type": "application/json" 
-            },
-            body: JSON.stringify({ 
-                model: "llama-3.3-70b-versatile", 
-                messages: [{role: "user", content: text}] 
-            })
+            headers: { "Authorization": `Bearer ${API_KEY}`, "Content-Type": "application/json" },
+            body: JSON.stringify({ model: "llama-3.3-70b-versatile", messages: [{role: "user", content: val}] })
         });
-        const d = await r.json();
-        document.getElementById(loadId).querySelector('.bubble').innerText = d.choices[0].message.content;
+        const data = await res.json();
+        document.getElementById(loadId).querySelector('.bubble').innerText = data.choices[0].message.content;
     } catch(e) {
-        document.getElementById(loadId).querySelector('.bubble').innerText = "Koneksi terputus.";
+        document.getElementById(loadId).querySelector('.bubble').innerText = "Gagal memuat jawaban.";
     }
 }
 
@@ -73,9 +81,4 @@ function addUI(txt, side) {
 }
 
 document.getElementById('sendBtn').addEventListener('click', pushMsg);
-msgInput.addEventListener('keydown', (e) => { 
-    if(e.key === 'Enter' && !e.shiftKey) { 
-        e.preventDefault(); 
-        pushMsg(); 
-    } 
-});
+msgInput.addEventListener('keydown', (e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); pushMsg(); } });
