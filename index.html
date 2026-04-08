@@ -13,7 +13,6 @@
         <div class="login-card" id="loginCard">
             <div style="font-size: 40px; margin-bottom: 10px;">🦅</div>
             <h2>Iman AI</h2>
-            <p>Sistem Asisten Pintar</p>
             <div class="form-group">
                 <label>Username</label>
                 <input type="text" id="uIn" class="login-input" placeholder="User">
@@ -27,25 +26,35 @@
     </div>
 
     <div id="chatApp">
-        <nav class="navbar">
-            <div class="brand"><span>🦅 IMAN AI</span></div>
+        <aside class="sidebar">
+            <button class="btn-new-chat" onclick="createNewChat()">+ Chat Baru</button>
+            <div class="history-label">Percakapan Terakhir</div>
+            <div id="chatHistory" class="chat-history-list">
+                </div>
             <button class="theme-toggle" id="themeSwitch">Mode Terang</button>
-        </nav>
+        </aside>
 
-        <div class="chat-container" id="msgBox">
-            <div class="message bot">
-                <div class="bubble">Halo **Iman**! Saya asisten Biru Anda. Apa yang ingin Anda diskusikan hari ini?</div>
-            </div>
-        </div>
+        <main class="main-content">
+            <nav class="navbar">
+                <div class="brand"><span>🦅 IMAN AI</span></div>
+                <button class="btn-clear" onclick="clearCurrentChat()">Hapus Pesan</button>
+            </nav>
 
-        <div class="input-bar">
-            <div class="input-box">
-                <textarea id="msgInput" placeholder="Ketik sesuatu..." rows="1"></textarea>
-                <button class="btn-send" id="sendBtn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-                </button>
+            <div class="chat-container" id="msgBox">
+                <div class="message bot">
+                    <div class="bubble">Halo **Iman**! Riwayat chat Anda aman di sini. Ada yang bisa saya bantu?</div>
+                </div>
             </div>
-        </div>
+
+            <div class="input-bar">
+                <div class="input-box">
+                    <textarea id="msgInput" placeholder="Ketik sesuatu..." rows="1"></textarea>
+                    <button class="btn-send" id="sendBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                    </button>
+                </div>
+            </div>
+        </main>
     </div>
 
     <script src="script.js"></script>
