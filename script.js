@@ -1,68 +1,86 @@
 const API_KEY = "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";
+const msgInput = document.getElementById('msgInput');
+const msgBox = document.getElementById('msgBox');
 
+// --- LOGIN ---
 function doLogin() {
     const u = document.getElementById('uIn').value;
     const p = document.getElementById('pIn').value;
     if(u === 'rex2003' && p === 'manz2005') {
-        document.getElementById('loginOverlay').style.display = 'none';
-        document.getElementById('chatApp').style.style.display = 'flex'; // Fix display
+        document.getElementById('loginOverlay').classList.add('hidden');
+        document.getElementById('chatApp').classList.remove('hidden');
     } else {
-        alert("Salah!");
+        alert("Akses ditolak!");
     }
 }
 
+// --- RESPONSIVE SIDEBAR ---
 function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('active');
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('-translate-x-full');
 }
 
-async function handleSend() {
-    const input = document.getElementById('msgInput');
-    const val = input.value.trim();
-    if(!val) return;
+// --- THEME ---
+function toggleTheme() {
+    const body = document.body;
+    const btn = document.getElementById('themeBtn');
+    const isDark = body.getAttribute('data-theme') === 'dark';
+    body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    btn.innerText = isDark ? '☀️ Mode Terang' : '🌙 Mode Gelap';
+}
 
-    addBubble(val, 'user');
-    input.value = '';
-    
-    const loadId = addBubble("Membalas...", 'bot');
+// --- CHAT ENGINE ---
+async function pushMsg() {
+    const text = msgInput.value.trim();
+    if(!text) return;
+
+    addUI(text, 'user');
+    msgInput.value = '';
+    msgInput.style.height = 'auto';
+
+    const loadId = addUI("Sedang mengetik...", 'bot');
 
     try {
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
             method: "POST",
             headers: { "Authorization": `Bearer ${API_KEY}`, "Content-Type": "application/json" },
-            body: JSON.stringify({ model: "llama-3.3-70b-versatile", messages: [{role: "user", content: val}] })
+            body: JSON.stringify({ model: "llama-3.3-70b-versatile", messages: [{role: "user", content: text}] })
         });
-        const data = await res.json();
-        document.getElementById(loadId).querySelector('.bubble').innerText = data.choices[0].message.content;
+        const d = await r.json();
+        document.getElementById(loadId).querySelector('.bubble-text').innerText = d.choices[0].message.content;
     } catch(e) {
-        document.getElementById(loadId).querySelector('.bubble').innerText = "Gagal kirim.";
+        document.getElementById(loadId).querySelector('.bubble-text').innerText = "Gagal memproses pesan.";
     }
 }
 
-function addBubble(txt, side) {
+function addUI(txt, side) {
     const id = 'm' + Date.now();
-    const box = document.getElementById('msgBox');
     const div = document.createElement('div');
-    div.className = `message ${side}`;
+    const isUser = side === 'user';
+    
+    div.className = `flex flex-col ${isUser ? 'items-end' : 'items-start'} max-w-[90%] ${isUser ? 'ml-auto' : ''}`;
     div.id = id;
-    div.innerHTML = `<div class="bubble">${txt}</div>`;
-    box.appendChild(div);
-    box.scrollTop = box.scrollHeight;
+    div.innerHTML = `
+        <div class="bubble-text p-4 rounded-2xl text-sm leading-relaxed border ${
+            isUser ? 'bg-blue-500 border-blue-400 text-white rounded-br-none' : 'bg-slate-800 border-slate-700 rounded-bl-none'
+        }">
+            ${txt}
+        </div>
+    `;
+    msgBox.appendChild(div);
+    msgBox.scrollTo({ top: msgBox.scrollHeight, behavior: 'smooth' });
     return id;
 }
 
-function clearCurrentChat() {
-    document.getElementById('msgBox').innerHTML = '';
-}
+// --- AUTO RESIZE INPUT ---
+msgInput.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
+});
 
-function createNewChat() {
-    clearCurrentChat();
-    if(window.innerWidth < 768) toggleSidebar();
-}
+// --- CONTROLS ---
+function clearChat() { if(confirm("Hapus layar?")) msgBox.innerHTML = ''; }
+function createNewChat() { clearChat(); if(window.innerWidth < 1024) toggleSidebar(); }
 
-document.getElementById('sendBtn').onclick = handleSend;
-document.getElementById('msgInput').onkeydown = (e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } };
-document.getElementById('themeSwitch').onclick = () => {
-    const theme = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    document.body.setAttribute('data-theme', theme);
-    document.getElementById('themeSwitch').innerText = theme === 'dark' ? '🌙 Dark Mode' : '☀️ Light Mode';
-};
+document.getElementById('sendBtn').onclick = pushMsg;
+msgInput.onkeydown = (e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); pushMsg(); } };
