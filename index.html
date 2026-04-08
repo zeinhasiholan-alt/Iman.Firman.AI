@@ -7,58 +7,63 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; height: 100dvh; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
-        [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --border: #334155; }
-        [data-theme="light"] { --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --border: #e2e8f0; }
-        body { background-color: var(--bg); color: var(--text); transition: all 0.3s ease; }
+        #sidebar { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        [data-theme="dark"] { --bg: #0f172a; --text: #f8fafc; }
+        [data-theme="light"] { --bg: #f8fafc; --text: #0f172a; }
+        body { background-color: var(--bg); color: var(--text); }
     </style>
 </head>
-<body data-theme="dark" class="h-[100dvh] overflow-hidden flex flex-col">
+<body data-theme="dark" class="overflow-hidden">
 
     <div id="loginOverlay" class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#0f172a]">
-        <div class="w-full max-width-[360px] bg-[#1e293b] p-8 rounded-3xl border border-slate-700 text-center shadow-2xl">
-            <svg class="mx-auto mb-6" viewBox="0 0 24 24" width="50" height="50" fill="#1DA1F2"><path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z"></path></svg>
-            <h2 class="text-2xl font-bold mb-6">Login Iman AI</h2>
-            <input type="text" id="uIn" placeholder="Username" class="w-full mb-4 p-4 bg-[#0f172a] border border-slate-700 rounded-xl outline-none focus:border-blue-500 transition-all">
-            <input type="password" id="pIn" placeholder="Password" class="w-full mb-6 p-4 bg-[#0f172a] border border-slate-700 rounded-xl outline-none focus:border-blue-500 transition-all">
-            <button onclick="doLogin()" class="w-full py-4 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-full transition-all">Masuk</button>
+        <div class="w-full max-w-[350px] bg-[#1e293b] p-8 rounded-3xl border border-slate-700 text-center shadow-2xl">
+            <div class="flex justify-center mb-6">
+                <svg viewBox="0 0 24 24" width="50" height="50" fill="#1DA1F2"><path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z"></path></svg>
+            </div>
+            <h2 class="text-xl font-bold mb-6">Masuk ke Iman AI</h2>
+            <input type="text" id="uIn" placeholder="Username" class="w-full mb-4 p-3 bg-[#0f172a] border border-slate-700 rounded-xl outline-none text-white">
+            <input type="password" id="pIn" placeholder="Password" class="w-full mb-6 p-3 bg-[#0f172a] border border-slate-700 rounded-xl outline-none text-white">
+            <button onclick="doLogin()" class="w-full py-3 bg-[#1DA1F2] hover:bg-blue-600 text-white font-bold rounded-full transition-all">Masuk</button>
         </div>
     </div>
 
     <div id="chatApp" class="hidden flex h-full w-full">
-        <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 w-[280px] bg-slate-900 border-r border-slate-800 flex flex-col z-50 transition-transform -translate-x-full lg:translate-x-0">
+        <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 w-[280px] bg-slate-900 border-r border-slate-800 flex flex-col z-50 -translate-x-full lg:translate-x-0">
             <div class="p-6 flex items-center gap-3 border-b border-slate-800">
-                <svg viewBox="0 0 24 24" width="30" height="30" fill="#1DA1F2"><path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z"></path></svg>
-                <span class="font-bold text-xl">Iman AI</span>
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="#1DA1F2"><path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z"></path></svg>
+                <span class="font-bold text-lg text-white">Iman AI</span>
             </div>
-            <div class="p-4 flex-1 overflow-y-auto hide-scrollbar" id="chatHistory">
-                <button onclick="createNewChat()" class="w-full p-3 mb-4 border border-slate-700 rounded-xl hover:bg-slate-800 transition-all text-sm font-semibold">+ Chat Baru</button>
+            <div class="p-4 flex-1">
+                <button onclick="createNewChat()" class="w-full p-3 border border-slate-700 rounded-xl text-white hover:bg-slate-800 text-sm font-semibold">+ Chat Baru</button>
             </div>
-            <div class="p-4 border-t border-slate-800">
-                <button onclick="toggleTheme()" id="themeBtn" class="w-full p-3 text-sm font-medium text-slate-400 hover:text-white transition-all">🌙 Mode Gelap</button>
+            <div class="p-4 border-t border-slate-800 text-center">
+                <button onclick="toggleTheme()" id="themeBtn" class="text-xs text-slate-400">🌙 Mode Gelap</button>
             </div>
         </aside>
 
-        <main class="flex-1 flex flex-col relative h-full">
-            <header class="h-16 flex items-center justify-between px-6 border-b border-slate-800 bg-[#0f172a]/80 backdrop-blur-md sticky top-0 z-40">
-                <button onclick="toggleSidebar()" class="lg:hidden text-2xl">☰</button>
-                <h1 class="font-bold text-lg">Percakapan</h1>
-                <button onclick="clearChat()" class="text-xs bg-red-500/10 text-red-500 px-3 py-1 rounded-full font-bold hover:bg-red-500 hover:text-white transition-all">HAPUS</button>
+        <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/60 z-40 hidden lg:hidden"></div>
+
+        <main class="flex-1 flex flex-col h-full bg-[#0f172a]">
+            <header class="h-14 flex items-center justify-between px-5 border-b border-slate-800 bg-[#0f172a]/95 backdrop-blur-md">
+                <button onclick="toggleSidebar()" class="lg:hidden text-2xl text-[#1DA1F2]">☰</button>
+                <h1 class="font-bold text-slate-200">Percakapan</h1>
+                <button onclick="clearChat()" class="text-[10px] bg-red-500/20 text-red-500 px-3 py-1 rounded-full font-bold">HAPUS</button>
             </header>
 
-            <div id="msgBox" class="flex-1 overflow-y-auto p-6 space-y-6 hide-scrollbar pb-32">
+            <div id="msgBox" class="flex-1 overflow-y-auto p-4 space-y-4 hide-scrollbar pb-28">
                 <div class="flex flex-col items-start max-w-[85%]">
-                    <div class="p-4 rounded-2xl rounded-bl-none bg-slate-800 border border-slate-700 text-sm leading-relaxed">
-                        Halo saya Iman AI, siap melayani Anda. Silakan ketik pesan di bawah.
+                    <div class="p-3 rounded-2xl rounded-bl-none bg-slate-800 border border-slate-700 text-sm text-slate-200">
+                        Halo saya Iman AI, siap membantu Anda! tanyakan apasaja.
                     </div>
                 </div>
             </div>
 
-            <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-[#0f172a] via-[#0f172a] to-transparent">
-                <div class="max-w-3xl mx-auto flex items-end gap-3 bg-slate-800 border border-slate-700 rounded-3xl p-2 px-4 shadow-xl mb-[env(safe-area-inset-bottom)]">
-                    <textarea id="msgInput" rows="1" placeholder="Tulis pesan..." class="flex-1 bg-transparent border-none outline-none py-3 text-[16px] resize-none max-h-32 hide-scrollbar"></textarea>
-                    <button id="sendBtn" class="p-3 bg-blue-500 rounded-full hover:bg-blue-600 transition-all">
+            <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-[#0f172a] to-transparent">
+                <div class="max-w-2xl mx-auto flex items-end gap-2 bg-slate-800 border border-slate-700 rounded-2xl p-2 px-3 shadow-2xl mb-[env(safe-area-inset-bottom)]">
+                    <textarea id="msgInput" rows="1" placeholder="Ketik pesan..." class="flex-1 bg-transparent border-none outline-none py-2 text-[16px] text-white resize-none max-h-32 overflow-y-auto"></textarea>
+                    <button id="sendBtn" class="p-2 bg-[#1DA1F2] rounded-full">
                         <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
                     </button>
                 </div>
@@ -66,6 +71,76 @@
         </main>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        const API_KEY = "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";
+        const msgInput = document.getElementById('msgInput');
+        const msgBox = document.getElementById('msgBox');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+
+        function doLogin() {
+            const u = document.getElementById('uIn').value;
+            const p = document.getElementById('pIn').value;
+            if(u === 'rex2003' && p === 'manz2005') {
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('chatApp').style.display = 'flex';
+            } else { alert("Salah!"); }
+        }
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const isDark = body.getAttribute('data-theme') === 'dark';
+            body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            document.getElementById('themeBtn').innerText = isDark ? '☀️ Mode Terang' : '🌙 Mode Gelap';
+        }
+
+        async function pushMsg() {
+            const text = msgInput.value.trim();
+            if(!text) return;
+            addUI(text, 'user');
+            msgInput.value = '';
+            msgInput.style.height = 'auto';
+            const loadId = addUI("...", 'bot');
+            try {
+                const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                    method: "POST",
+                    headers: { "Authorization": `Bearer ${API_KEY}`, "Content-Type": "application/json" },
+                    body: JSON.stringify({ model: "llama-3.3-70b-versatile", messages: [{role: "user", content: text}] })
+                });
+                const d = await r.json();
+                document.getElementById(loadId).querySelector('.txt').innerText = d.choices[0].message.content;
+            } catch(e) {
+                document.getElementById(loadId).querySelector('.txt').innerText = "Gagal.";
+            }
+        }
+
+        function addUI(txt, side) {
+            const id = 'm' + Date.now();
+            const div = document.createElement('div');
+            const isUser = side === 'user';
+            div.className = `flex flex-col ${isUser ? 'items-end' : 'items-start'} w-full`;
+            div.id = id;
+            div.innerHTML = `<div class="txt p-3 max-w-[85%] rounded-2xl text-sm ${isUser ? 'bg-[#1DA1F2] text-white rounded-br-none ml-auto' : 'bg-slate-800 border border-slate-700 text-slate-200 rounded-bl-none'}">${txt}</div>`;
+            msgBox.appendChild(div);
+            msgBox.scrollTop = msgBox.scrollHeight;
+            return id;
+        }
+
+        msgInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        function clearChat() { if(confirm("Hapus?")) msgBox.innerHTML = ''; }
+        function createNewChat() { clearChat(); if(window.innerWidth < 1024) toggleSidebar(); }
+
+        document.getElementById('sendBtn').onclick = pushMsg;
+        msgInput.onkeydown = (e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); pushMsg(); } };
+    </script>
 </body>
 </html>
