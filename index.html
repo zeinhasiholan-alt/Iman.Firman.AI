@@ -2,60 +2,64 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iman AI - Twitter Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Iman AI Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --border: #334155; }
+        [data-theme="light"] { --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --border: #e2e8f0; }
+        body { background-color: var(--bg); color: var(--text); transition: all 0.3s ease; }
+    </style>
 </head>
-<body data-theme="dark">
+<body data-theme="dark" class="h-[100dvh] overflow-hidden flex flex-col">
 
-    <div id="loginOverlay">
-        <div class="login-card" id="loginCard">
-            <div class="brand-icon">
-                <svg viewBox="0 0 24 24" width="50" height="50" fill="#1DA1F2"><path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z"></path></svg>
-            </div>
-            <h2>Iman Firman</h2>
-            <div class="form-group">
-                <input type="text" id="uIn" class="login-input" placeholder="Username">
-            </div>
-            <div class="form-group">
-                <input type="password" id="pIn" class="login-input" placeholder="Password">
-            </div>
-            <button class="btn-login" onclick="doLogin()">Masuk</button>
+    <div id="loginOverlay" class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#0f172a]">
+        <div class="w-full max-width-[360px] bg-[#1e293b] p-8 rounded-3xl border border-slate-700 text-center shadow-2xl">
+            <svg class="mx-auto mb-6" viewBox="0 0 24 24" width="50" height="50" fill="#1DA1F2"><path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z"></path></svg>
+            <h2 class="text-2xl font-bold mb-6">Login Iman AI</h2>
+            <input type="text" id="uIn" placeholder="Username" class="w-full mb-4 p-4 bg-[#0f172a] border border-slate-700 rounded-xl outline-none focus:border-blue-500 transition-all">
+            <input type="password" id="pIn" placeholder="Password" class="w-full mb-6 p-4 bg-[#0f172a] border border-slate-700 rounded-xl outline-none focus:border-blue-500 transition-all">
+            <button onclick="doLogin()" class="w-full py-4 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-full transition-all">Masuk</button>
         </div>
     </div>
 
-    <div id="chatApp">
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
+    <div id="chatApp" class="hidden flex h-full w-full">
+        <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 w-[280px] bg-slate-900 border-r border-slate-800 flex flex-col z-50 transition-transform -translate-x-full lg:translate-x-0">
+            <div class="p-6 flex items-center gap-3 border-b border-slate-800">
                 <svg viewBox="0 0 24 24" width="30" height="30" fill="#1DA1F2"><path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z"></path></svg>
-                <span>Iman AI</span>
+                <span class="font-bold text-xl">Iman AI</span>
             </div>
-            <button class="btn-nav" onclick="createNewChat()">+ Chat Baru</button>
-            <div id="chatHistory" class="history-container"></div>
-            <div class="sidebar-footer">
-                <button id="themeSwitch" class="btn-text">🌙 Dark Mode</button>
+            <div class="p-4 flex-1 overflow-y-auto hide-scrollbar" id="chatHistory">
+                <button onclick="createNewChat()" class="w-full p-3 mb-4 border border-slate-700 rounded-xl hover:bg-slate-800 transition-all text-sm font-semibold">+ Chat Baru</button>
+            </div>
+            <div class="p-4 border-t border-slate-800">
+                <button onclick="toggleTheme()" id="themeBtn" class="w-full p-3 text-sm font-medium text-slate-400 hover:text-white transition-all">🌙 Mode Gelap</button>
             </div>
         </aside>
 
-        <main class="main-content">
-            <header class="top-nav">
-                <button class="menu-mobile" onclick="toggleSidebar()">☰</button>
-                <div class="nav-title">Percakapan</div>
-                <button class="btn-clear" onclick="clearCurrentChat()">Hapus</button>
+        <main class="flex-1 flex flex-col relative h-full">
+            <header class="h-16 flex items-center justify-between px-6 border-b border-slate-800 bg-[#0f172a]/80 backdrop-blur-md sticky top-0 z-40">
+                <button onclick="toggleSidebar()" class="lg:hidden text-2xl">☰</button>
+                <h1 class="font-bold text-lg">Percakapan</h1>
+                <button onclick="clearChat()" class="text-xs bg-red-500/10 text-red-500 px-3 py-1 rounded-full font-bold hover:bg-red-500 hover:text-white transition-all">HAPUS</button>
             </header>
 
-            <div class="chat-window" id="msgBox">
-                <div class="message bot">
-                    <div class="bubble">Halo Saya Iman AI, siap membantu anda! tanyakan apasaja.</div>
+            <div id="msgBox" class="flex-1 overflow-y-auto p-6 space-y-6 hide-scrollbar pb-32">
+                <div class="flex flex-col items-start max-w-[85%]">
+                    <div class="p-4 rounded-2xl rounded-bl-none bg-slate-800 border border-slate-700 text-sm leading-relaxed">
+                        Halo saya Iman AI, siap melayani Anda. Silakan ketik pesan di bawah.
+                    </div>
                 </div>
             </div>
 
-            <div class="bottom-input">
-                <div class="input-container">
-                    <textarea id="msgInput" placeholder="Ketik pesan..." rows="1"></textarea>
-                    <button id="sendBtn" class="send-icon">
-                        <svg viewBox="0 0 24 24" width="24" height="24" fill="#1DA1F2"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-[#0f172a] via-[#0f172a] to-transparent">
+                <div class="max-w-3xl mx-auto flex items-end gap-3 bg-slate-800 border border-slate-700 rounded-3xl p-2 px-4 shadow-xl mb-[env(safe-area-inset-bottom)]">
+                    <textarea id="msgInput" rows="1" placeholder="Tulis pesan..." class="flex-1 bg-transparent border-none outline-none py-3 text-[16px] resize-none max-h-32 hide-scrollbar"></textarea>
+                    <button id="sendBtn" class="p-3 bg-blue-500 rounded-full hover:bg-blue-600 transition-all">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
                     </button>
                 </div>
             </div>
