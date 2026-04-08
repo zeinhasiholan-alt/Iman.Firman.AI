@@ -1,114 +1,68 @@
 const API_KEY = "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";
-let currentMessages = [];
 
-// --- LOGIN ---
 function doLogin() {
     const u = document.getElementById('uIn').value;
     const p = document.getElementById('pIn').value;
     if(u === 'rex2003' && p === 'manz2005') {
         document.getElementById('loginOverlay').style.display = 'none';
-        document.getElementById('chatApp').style.display = 'flex';
-        loadSavedHistory();
+        document.getElementById('chatApp').style.style.display = 'flex'; // Fix display
     } else {
-        alert("Akses Ditolak!");
+        alert("Salah!");
     }
 }
 
-// --- VOICE RECOGNITION ---
-const voiceBtn = document.getElementById('voiceBtn');
-if ('webkitSpeechRecognition' in window) {
-    const recognition = new webkitSpeechRecognition();
-    recognition.lang = 'id-ID';
-    voiceBtn.onclick = () => {
-        recognition.start();
-        voiceBtn.innerText = "Listening...";
-    };
-    recognition.onresult = (event) => {
-        document.getElementById('msgInput').value = event.results[0][0].transcript;
-        voiceBtn.innerText = "🎤";
-    };
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('active');
 }
 
-// --- LOGIKA CHAT ---
-async function sendMessage() {
+async function handleSend() {
     const input = document.getElementById('msgInput');
-    const text = input.value.trim();
-    if(!text) return;
+    const val = input.value.trim();
+    if(!val) return;
 
-    addMessage(text, 'user');
+    addBubble(val, 'user');
     input.value = '';
     
-    const loadId = addMessage("Menganalisa...", 'bot');
+    const loadId = addBubble("Membalas...", 'bot');
 
     try {
-        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
             method: "POST",
             headers: { "Authorization": `Bearer ${API_KEY}`, "Content-Type": "application/json" },
-            body: JSON.stringify({ model: "llama-3.3-70b-versatile", messages: [{role: "user", content: text}] })
+            body: JSON.stringify({ model: "llama-3.3-70b-versatile", messages: [{role: "user", content: val}] })
         });
-        const data = await response.json();
-        const replay = data.choices[0].message.content;
-        document.getElementById(loadId).querySelector('.bubble').innerText = replay;
-        
-        saveToLocal(text, replay);
+        const data = await res.json();
+        document.getElementById(loadId).querySelector('.bubble').innerText = data.choices[0].message.content;
     } catch(e) {
-        document.getElementById(loadId).querySelector('.bubble').innerText = "Kesalahan koneksi.";
+        document.getElementById(loadId).querySelector('.bubble').innerText = "Gagal kirim.";
     }
 }
 
-function addMessage(text, side) {
-    const id = 'msg-' + Date.now();
+function addBubble(txt, side) {
+    const id = 'm' + Date.now();
     const box = document.getElementById('msgBox');
     const div = document.createElement('div');
     div.className = `message ${side}`;
     div.id = id;
-    div.innerHTML = `<div class="bubble">${text}</div>`;
+    div.innerHTML = `<div class="bubble">${txt}</div>`;
     box.appendChild(div);
     box.scrollTop = box.scrollHeight;
-    currentMessages.push({side, text});
     return id;
 }
 
-// --- FITUR KEREN: EXPORT & SAVE ---
-function downloadChat() {
-    let content = "RIWAYAT CHAT IMAN AI\n====================\n\n";
-    currentMessages.forEach(m => content += `${m.side.toUpperCase()}: ${m.text}\n\n`);
-    const blob = new Blob([content], {type: "text/plain"});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `chat-iman-${Date.now()}.txt`;
-    a.click();
-}
-
-function saveToLocal(q, a) {
-    let history = JSON.parse(localStorage.getItem('iman_history') || '[]');
-    history.push({q, time: new Date().toLocaleTimeString()});
-    localStorage.setItem('iman_history', JSON.stringify(history.slice(-10)));
-    renderHistory();
-}
-
-function renderHistory() {
-    const list = document.getElementById('chatHistory');
-    const history = JSON.parse(localStorage.getItem('iman_history') || '[]');
-    list.innerHTML = history.map(h => `<div class="history-item">🕒 ${h.q.substring(0, 20)}...</div>`).join('');
+function clearCurrentChat() {
+    document.getElementById('msgBox').innerHTML = '';
 }
 
 function createNewChat() {
-    document.getElementById('msgBox').innerHTML = '';
-    currentMessages = [];
+    clearCurrentChat();
+    if(window.innerWidth < 768) toggleSidebar();
 }
 
-function clearCurrentChat() {
-    if(confirm("Hapus semua pesan di layar?")) createNewChat();
-}
-
-// Bind Events
-document.getElementById('sendBtn').onclick = sendMessage;
-document.getElementById('msgInput').onkeydown = (e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } };
+document.getElementById('sendBtn').onclick = handleSend;
+document.getElementById('msgInput').onkeydown = (e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } };
 document.getElementById('themeSwitch').onclick = () => {
-    const body = document.body;
-    const isDark = body.getAttribute('data-theme') === 'dark';
-    body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    document.getElementById('themeSwitch').innerText = isDark ? '☀️ Mode Terang' : '🌙 Mode Gelap';
+    const theme = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.body.setAttribute('data-theme', theme);
+    document.getElementById('themeSwitch').innerText = theme === 'dark' ? '🌙 Dark Mode' : '☀️ Light Mode';
 };
