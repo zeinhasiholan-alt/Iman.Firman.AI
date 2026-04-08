@@ -1,10 +1,4 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    transition: background 0.25s ease, color 0.2s ease, border-color 0.2s ease;
-}
-
+/* ... (Gunakan variabel :root biru tua yang sebelumnya) ... */
 :root {
     --bg-body: #0a0f1d;
     --bg-card: #121a2e;
@@ -29,167 +23,68 @@
     --msg-user: #2563eb;
 }
 
-body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: var(--bg-body);
-    color: var(--text-main);
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-}
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-body); color: var(--text-main); height: 100vh; display: flex; overflow: hidden; }
 
-#loginOverlay {
-    position: fixed;
-    inset: 0;
-    background: var(--bg-body);
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.login-card {
-    width: 100%;
-    max-width: 360px;
-    padding: 40px;
+/* Layout Sidebar */
+.sidebar {
+    width: 260px;
     background: var(--bg-card);
-    border: 2px solid var(--border);
-    border-radius: 20px;
-    text-align: center;
-}
-
-.login-card h2 { font-weight: 700; font-size: 1.5rem; margin-bottom: 8px; color: var(--primary); }
-.login-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 25px; }
-
-.form-group { text-align: left; margin-bottom: 15px; }
-.form-group label { display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
-
-.login-input {
-    width: 100%;
-    padding: 12px 16px;
-    background: var(--bg-input);
-    border: 2px solid var(--border);
-    border-radius: 10px;
-    color: var(--text-main);
-    outline: none;
-}
-
-.login-input:focus { border-color: var(--primary); }
-
-.btn-login {
-    width: 100%;
-    padding: 14px;
-    background: var(--primary);
-    border: none;
-    border-radius: 10px;
-    color: white;
-    font-weight: 700;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-#chatApp { display: none; width: 100%; height: 100vh; flex-direction: column; }
-
-.navbar {
-    height: 70px;
-    background: var(--bg-card);
-    border-bottom: 2px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 25px;
-}
-
-.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--primary); }
-
-.theme-toggle {
-    padding: 8px 16px;
-    background: var(--bg-input);
-    border: 2px solid var(--border);
-    border-radius: 8px;
-    cursor: pointer;
-    color: var(--text-main);
-    font-size: 0.8rem;
-    font-weight: 600;
-}
-
-.chat-container {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
+    border-right: 2px solid var(--border);
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    max-width: 900px;
-    margin: 0 auto;
-    width: 100%;
+    padding: 15px;
+    height: 100%;
 }
 
+.btn-new-chat {
+    background: transparent;
+    border: 2px solid var(--border);
+    color: var(--text-main);
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.btn-new-chat:hover { border-color: var(--primary); }
+
+.chat-history-list { flex: 1; overflow-y: auto; }
+
+.history-item {
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 5px;
+}
+
+.history-item:hover { background: var(--bg-input); }
+
+/* Layout Utama */
+.main-content { flex: 1; display: flex; flex-direction: column; position: relative; }
+
+.navbar { height: 60px; border-bottom: 2px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
+
+.btn-clear { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
+
+.chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+
+.input-bar { padding: 20px; border-top: 2px solid var(--border); }
+.input-box { max-width: 800px; margin: 0 auto; display: flex; background: var(--bg-card); border: 2px solid var(--border); border-radius: 12px; padding: 8px; }
+
+/* ... (Gunakan sisa CSS bubble dan login dari versi sebelumnya) ... */
 .message { display: flex; flex-direction: column; max-width: 80%; }
 .message.bot { align-self: flex-start; }
 .message.user { align-self: flex-end; }
-
-.bubble {
-    padding: 14px 18px;
-    border-radius: 15px;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    background: var(--bg-card);
-    border: 2px solid var(--border);
-}
-
-.user .bubble {
-    background: var(--msg-user);
-    color: white;
-    border: none;
-    border-bottom-right-radius: 2px;
-}
-
-.input-bar {
-    padding: 20px;
-    background: var(--bg-body);
-    border-top: 2px solid var(--border);
-}
-
-.input-box {
-    max-width: 860px;
-    margin: 0 auto;
-    display: flex;
-    background: var(--bg-card);
-    border: 2px solid var(--border);
-    border-radius: 15px;
-    padding: 8px 12px;
-    align-items: center;
-}
-
-textarea {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--text-main);
-    padding: 8px;
-    resize: none;
-    max-height: 150px;
-}
-
-.btn-send {
-    width: 40px;
-    height: 40px;
-    background: var(--primary);
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.shake { animation: shake 0.3s ease; border-color: #ef4444 !important; }
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20% { transform: translateX(-10px); }
-    60% { transform: translateX(10px); }
-}
+.bubble { padding: 12px 16px; border-radius: 12px; font-size: 0.95rem; background: var(--bg-card); border: 2px solid var(--border); }
+.user .bubble { background: var(--msg-user); color: white; border: none; }
+textarea { flex: 1; background: transparent; border: none; outline: none; color: var(--text-main); padding: 8px; resize: none; }
+.btn-send { width: 40px; height: 40px; background: var(--primary); border: none; border-radius: 8px; cursor: pointer; }
+#loginOverlay { position: fixed; inset: 0; background: var(--bg-body); z-index: 1000; display: flex; justify-content: center; align-items: center; }
+.login-card { width: 350px; padding: 30px; background: var(--bg-card); border: 2px solid var(--border); border-radius: 20px; text-align: center; }
+.login-input { width: 100%; padding: 10px; margin: 10px 0; background: var(--bg-input); border: 2px solid var(--border); border-radius: 8px; color: white; }
+.btn-login { width: 100%; padding: 10px; background: var(--primary); border: none; color: white; border-radius: 8px; cursor: pointer; }
