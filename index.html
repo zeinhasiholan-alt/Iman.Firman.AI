@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iman AI - Intelligent Assistant</title>
+    <title>Iman AI - Pro Assistant</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,46 +11,57 @@
 
     <div id="loginOverlay">
         <div class="login-card" id="loginCard">
-            <div style="font-size: 40px; margin-bottom: 10px;">🦅</div>
-            <h2>Iman AI</h2>
+            <div class="brand-icon">🦅</div>
+            <h2>Iman AI Pro</h2>
+            <p>Sistem Keamanan Terenkripsi</p>
             <div class="form-group">
                 <label>Username</label>
-                <input type="text" id="uIn" class="login-input" placeholder="User">
+                <input type="text" id="uIn" class="login-input" placeholder="rex...">
             </div>
             <div class="form-group">
                 <label>Password</label>
                 <input type="password" id="pIn" class="login-input" placeholder="••••">
             </div>
-            <button class="btn-login" onclick="doLogin()">Masuk</button>
+            <button class="btn-login" onclick="doLogin()">Otentikasi</button>
         </div>
     </div>
 
     <div id="chatApp">
         <aside class="sidebar">
-            <button class="btn-new-chat" onclick="createNewChat()">+ Chat Baru</button>
-            <div class="history-label">Percakapan Terakhir</div>
-            <div id="chatHistory" class="chat-history-list">
-                </div>
-            <button class="theme-toggle" id="themeSwitch">Mode Terang</button>
+            <button class="btn-action primary" onclick="createNewChat()">+ Chat Baru</button>
+            <div class="divider"></div>
+            <div class="history-label">Riwayat Percakapan</div>
+            <div id="chatHistory" class="chat-history-list"></div>
+            
+            <div class="sidebar-footer">
+                <button class="btn-action secondary" onclick="downloadChat()">💾 Ekspor Chat</button>
+                <button class="theme-toggle" id="themeSwitch">🌙 Mode Gelap</button>
+            </div>
         </aside>
 
         <main class="main-content">
             <nav class="navbar">
-                <div class="brand"><span>🦅 IMAN AI</span></div>
-                <button class="btn-clear" onclick="clearCurrentChat()">Hapus Pesan</button>
+                <div class="nav-info">
+                    <span class="status-dot"></span>
+                    <strong>Sesi Aktif</strong>
+                </div>
+                <div class="nav-actions">
+                    <button class="btn-icon-nav" onclick="clearCurrentChat()" title="Hapus Layar">🗑️</button>
+                </div>
             </nav>
 
             <div class="chat-container" id="msgBox">
                 <div class="message bot">
-                    <div class="bubble">Halo **Iman**! Riwayat chat Anda aman di sini. Ada yang bisa saya bantu?</div>
+                    <div class="bubble">Selamat datang kembali, **Iman**. Sistem siap melayani perintah Anda.</div>
                 </div>
             </div>
 
-            <div class="input-bar">
-                <div class="input-box">
-                    <textarea id="msgInput" placeholder="Ketik sesuatu..." rows="1"></textarea>
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <button class="btn-util" id="voiceBtn" title="Input Suara">🎤</button>
+                    <textarea id="msgInput" placeholder="Tulis instruksi di sini..." rows="1"></textarea>
                     <button class="btn-send" id="sendBtn">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
                     </button>
                 </div>
             </div>
