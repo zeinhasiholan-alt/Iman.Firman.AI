@@ -1,90 +1,56 @@
-/* ... (Gunakan variabel :root biru tua yang sebelumnya) ... */
 :root {
-    --bg-body: #0a0f1d;
-    --bg-card: #121a2e;
-    --bg-input: #1b253d;
+    --bg-body: #080c14;
+    --bg-sidebar: #0d121f;
+    --bg-card: #141b2d;
+    --bg-input: #1e263b;
     --primary: #3b82f6;
-    --primary-dark: #2563eb;
-    --text-main: #f1f5f9;
-    --text-muted: #94a3b8;
-    --border: #243154;
-    --msg-user: #3b82f6;
+    --text-main: #f8fafc;
+    --text-muted: #64748b;
+    --border: #1e293b;
 }
 
 [data-theme="light"] {
-    --bg-body: #f8fafc;
+    --bg-body: #ffffff;
+    --bg-sidebar: #f8fafc;
     --bg-card: #ffffff;
     --bg-input: #f1f5f9;
     --primary: #2563eb;
-    --primary-dark: #1d4ed8;
     --text-main: #0f172a;
     --text-muted: #64748b;
     --border: #e2e8f0;
-    --msg-user: #2563eb;
 }
 
-body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-body); color: var(--text-main); height: 100vh; display: flex; overflow: hidden; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-body); color: var(--text-main); height: 100vh; display: flex; overflow: hidden; margin: 0; }
 
-/* Layout Sidebar */
-.sidebar {
-    width: 260px;
-    background: var(--bg-card);
-    border-right: 2px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    padding: 15px;
-    height: 100%;
-}
+/* SIDEBAR */
+.sidebar { width: 280px; background: var(--bg-sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; }
+.btn-action { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; font-weight: 600; margin-bottom: 10px; transition: 0.2s; }
+.btn-action.primary { background: var(--primary); color: white; border: none; }
+.btn-action.secondary { background: transparent; color: var(--text-main); font-size: 0.8rem; }
+.chat-history-list { flex: 1; margin-top: 15px; }
+.history-item { padding: 10px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; color: var(--text-muted); }
+.history-item:hover { background: var(--bg-input); color: var(--text-main); }
+.sidebar-footer { border-top: 1px solid var(--border); padding-top: 15px; }
 
-.btn-new-chat {
-    background: transparent;
-    border: 2px solid var(--border);
-    color: var(--text-main);
-    padding: 12px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 600;
-    margin-bottom: 20px;
-}
+/* MAIN CONTENT */
+.main-content { flex: 1; display: flex; flex-direction: column; }
+.navbar { height: 60px; padding: 0 30px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+.status-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: inline-block; margin-right: 8px; }
 
-.btn-new-chat:hover { border-color: var(--primary); }
-
-.chat-history-list { flex: 1; overflow-y: auto; }
-
-.history-item {
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-bottom: 5px;
-}
-
-.history-item:hover { background: var(--bg-input); }
-
-/* Layout Utama */
-.main-content { flex: 1; display: flex; flex-direction: column; position: relative; }
-
-.navbar { height: 60px; border-bottom: 2px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
-
-.btn-clear { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
-
-.chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-
-.input-bar { padding: 20px; border-top: 2px solid var(--border); }
-.input-box { max-width: 800px; margin: 0 auto; display: flex; background: var(--bg-card); border: 2px solid var(--border); border-radius: 12px; padding: 8px; }
-
-/* ... (Gunakan sisa CSS bubble dan login dari versi sebelumnya) ... */
-.message { display: flex; flex-direction: column; max-width: 80%; }
-.message.bot { align-self: flex-start; }
+.chat-container { flex: 1; overflow-y: auto; padding: 40px 10%; display: flex; flex-direction: column; gap: 20px; }
+.message { display: flex; flex-direction: column; max-width: 85%; }
 .message.user { align-self: flex-end; }
-.bubble { padding: 12px 16px; border-radius: 12px; font-size: 0.95rem; background: var(--bg-card); border: 2px solid var(--border); }
-.user .bubble { background: var(--msg-user); color: white; border: none; }
-textarea { flex: 1; background: transparent; border: none; outline: none; color: var(--text-main); padding: 8px; resize: none; }
-.btn-send { width: 40px; height: 40px; background: var(--primary); border: none; border-radius: 8px; cursor: pointer; }
-#loginOverlay { position: fixed; inset: 0; background: var(--bg-body); z-index: 1000; display: flex; justify-content: center; align-items: center; }
-.login-card { width: 350px; padding: 30px; background: var(--bg-card); border: 2px solid var(--border); border-radius: 20px; text-align: center; }
-.login-input { width: 100%; padding: 10px; margin: 10px 0; background: var(--bg-input); border: 2px solid var(--border); border-radius: 8px; color: white; }
-.btn-login { width: 100%; padding: 10px; background: var(--primary); border: none; color: white; border-radius: 8px; cursor: pointer; }
+.bubble { padding: 16px 20px; border-radius: 18px; line-height: 1.6; background: var(--bg-card); border: 1px solid var(--border); }
+.user .bubble { background: var(--primary); color: white; border: none; border-bottom-right-radius: 4px; }
+
+.input-area { padding: 20px 10% 40px 10%; }
+.input-wrapper { display: flex; align-items: center; background: var(--bg-card); border: 1px solid var(--border); border-radius: 15px; padding: 10px; }
+textarea { flex: 1; background: transparent; border: none; outline: none; color: var(--text-main); padding: 10px; resize: none; font-size: 1rem; }
+.btn-util { background: transparent; border: none; font-size: 1.2rem; cursor: pointer; padding: 0 10px; }
+.btn-send { width: 45px; height: 45px; background: var(--primary); border: none; border-radius: 12px; cursor: pointer; }
+
+/* LOGIN */
+#loginOverlay { position: fixed; inset: 0; background: var(--bg-body); z-index: 2000; display: flex; align-items: center; justify-content: center; }
+.login-card { width: 380px; padding: 40px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; text-align: center; }
+.login-input { width: 100%; padding: 12px; margin: 10px 0; background: var(--bg-input); border: 1px solid var(--border); border-radius: 10px; color: white; }
+.btn-login { width: 100%; padding: 14px; background: var(--primary); border: none; color: white; border-radius: 10px; font-weight: 700; cursor: pointer; }
