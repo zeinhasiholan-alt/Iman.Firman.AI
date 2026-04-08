@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iman AI - Pro Assistant</title>
+    <title>Iman AI - Twitter Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,57 +11,51 @@
 
     <div id="loginOverlay">
         <div class="login-card" id="loginCard">
-            <div class="brand-icon">🦅</div>
-            <h2>Iman AI Pro</h2>
-            <p>Sistem Keamanan Terenkripsi</p>
+            <div class="brand-icon">
+                <svg viewBox="0 0 24 24" width="50" height="50" fill="#1DA1F2"><path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z"></path></svg>
+            </div>
+            <h2>Masuk ke Iman AI</h2>
             <div class="form-group">
-                <label>Username</label>
-                <input type="text" id="uIn" class="login-input" placeholder="rex...">
+                <input type="text" id="uIn" class="login-input" placeholder="Username">
             </div>
             <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="pIn" class="login-input" placeholder="••••">
+                <input type="password" id="pIn" class="login-input" placeholder="Password">
             </div>
-            <button class="btn-login" onclick="doLogin()">Otentikasi</button>
+            <button class="btn-login" onclick="doLogin()">Masuk</button>
         </div>
     </div>
 
     <div id="chatApp">
-        <aside class="sidebar">
-            <button class="btn-action primary" onclick="createNewChat()">+ Chat Baru</button>
-            <div class="divider"></div>
-            <div class="history-label">Riwayat Percakapan</div>
-            <div id="chatHistory" class="chat-history-list"></div>
-            
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <svg viewBox="0 0 24 24" width="30" height="30" fill="#1DA1F2"><path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z"></path></svg>
+                <span>Iman AI</span>
+            </div>
+            <button class="btn-nav" onclick="createNewChat()">+ Chat Baru</button>
+            <div id="chatHistory" class="history-container"></div>
             <div class="sidebar-footer">
-                <button class="btn-action secondary" onclick="downloadChat()">💾 Ekspor Chat</button>
-                <button class="theme-toggle" id="themeSwitch">🌙 Mode Gelap</button>
+                <button id="themeSwitch" class="btn-text">🌙 Dark Mode</button>
             </div>
         </aside>
 
         <main class="main-content">
-            <nav class="navbar">
-                <div class="nav-info">
-                    <span class="status-dot"></span>
-                    <strong>Sesi Aktif</strong>
-                </div>
-                <div class="nav-actions">
-                    <button class="btn-icon-nav" onclick="clearCurrentChat()" title="Hapus Layar">🗑️</button>
-                </div>
-            </nav>
+            <header class="top-nav">
+                <button class="menu-mobile" onclick="toggleSidebar()">☰</button>
+                <div class="nav-title">Percakapan</div>
+                <button class="btn-clear" onclick="clearCurrentChat()">Hapus</button>
+            </header>
 
-            <div class="chat-container" id="msgBox">
+            <div class="chat-window" id="msgBox">
                 <div class="message bot">
-                    <div class="bubble">Selamat datang kembali, **Iman**. Sistem siap melayani perintah Anda.</div>
+                    <div class="bubble">Halo **Saya Iman AI**, siap membantu anda! tanyakan apasaja.</div>
                 </div>
             </div>
 
-            <div class="input-area">
-                <div class="input-wrapper">
-                    <button class="btn-util" id="voiceBtn" title="Input Suara">🎤</button>
-                    <textarea id="msgInput" placeholder="Tulis instruksi di sini..." rows="1"></textarea>
-                    <button class="btn-send" id="sendBtn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            <div class="bottom-input">
+                <div class="input-container">
+                    <textarea id="msgInput" placeholder="Ketik pesan..." rows="1"></textarea>
+                    <button id="sendBtn" class="send-icon">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="#1DA1F2"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
                     </button>
                 </div>
             </div>
