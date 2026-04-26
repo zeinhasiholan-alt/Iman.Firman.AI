@@ -1,4 +1,4 @@
-const API_KEY = "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";
+const API_KEY = "xai-dij2ynvlPYNSTxI92pHELeboHu4BOMHyinQVuoSQc1vhjNoGiGcFXyO0Ooc5alXm4YC4wdVwo9P4uOrR";
 const msgInput = document.getElementById('msgInput');
 const msgBox = document.getElementById('msgBox');
 
